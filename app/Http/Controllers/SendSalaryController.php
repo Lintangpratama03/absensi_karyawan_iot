@@ -26,7 +26,7 @@ class SendSalaryController extends Controller
     public function checkExisting(Request $request)
     {
         $month = $request->input('month');
-        dd($month);
+        //dd($month);
         $exists = Payroll::where('month', $month)->exists();
         // dd($exists);
         return response()->json([
@@ -62,12 +62,16 @@ class SendSalaryController extends Controller
             $holidayCount = $totalDaysInMonth - $attendanceDates - $lateCount;
 
             $salary = $post->salary;
-            $holidaySalary = $post->holiday_salary;
+            if ($attendanceDates > 2) {
+                $holidaySalary = $post->holiday_salary;
+            } else {
+                $holidaySalary = 0;
+            }
             $bonus = ($holidayCount <= 2) ? 100000 : 0;
             $totalSalary = $attendanceDates * $salary;
             $cut = $lateCount * Setting::first()->fine;
             $totalTransport = $attendanceDates * Setting::first()->fuel;
-            $amount = $totalSalary + $bonus + $totalTransport - $cut;
+            $amount = $totalSalary + $holidaySalary + $bonus + $totalTransport - $cut;
 
             Payroll::create([
                 'month' => $month,
@@ -86,7 +90,6 @@ class SendSalaryController extends Controller
                 'note' => 'Gaji bulan ' . Carbon::createFromFormat('Y-m', $month)->format('F Y'),
             ]);
         }
-
         return response()->json([
             'message' => 'Data gaji untuk seluruh karyawan pada bulan ini telah dikirim.'
         ]);
