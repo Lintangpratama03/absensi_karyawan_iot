@@ -158,6 +158,9 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="/js/dashboard.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    @yield('scripts')
 </body>
 
 </html>

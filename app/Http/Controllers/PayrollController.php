@@ -13,29 +13,48 @@ class PayrollController extends Controller
 
     public function showForm()
     {
-        return view('employee.payroll.index');
+        $userTag = Auth::user()->tag;
+        $payrolls = Payroll::where('tag', $userTag)->get();
+        // dd($payrolls);
+        return view('employee.payroll.index', compact('payrolls'));
+    }
+    public function getPayrollData(Request $request)
+    {
+        $userTag = Auth::user()->tag;
+        $query = Payroll::where('tag', $userTag);
+
+        $date = $request->date;
+        $month = $request->month;
+        $year = $request->year;
+        // dd($month);
+        if ($date) {
+            $query->where('month', 'like', "%$date%");
+        }
+        if ($month) {
+            $query->where('month', 'like', "%-$month");
+        }
+        if ($year) {
+            $query->where('month', 'like', "$year-%");
+        }
+
+        return datatables()->eloquent($query)->toJson();
     }
 
-    public function getPayroll(Request $request)
+
+    public function generatePDF($id)
     {
-        $month = $request->input('month');
-        $payrolls = Payroll::where('name', auth()->user()->name)
-            ->where('month', $month)
-            ->get();
+        $payroll = Payroll::where('id', $id)->first();
 
-        return view('employee.payroll.form', compact('payrolls'));
-    }
-
-    public function generatePDF()
-    {
-        $payrolls = Payroll::all();
-        $dompdf = new Dompdf();
-        $html = view('pdf.dashboard', compact('payrolls'))->render();
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A5', 'portrait');
-        $dompdf->render();
-
-        return $dompdf->stream("payrolls.pdf");
+        if ($payroll) {
+            $dompdf = new Dompdf();
+            $logoPath = public_path('img/logo.jpeg');
+            $html = view('pdf.dashboard', compact('payroll', 'logoPath'))->render();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+            return $dompdf->stream("payroll-{$payroll->id}.pdf");
+        } else {
+            return redirect()->back()->with('error', 'Payroll not found');
+        }
     }
 }

@@ -80,4 +80,6 @@ Route::resource('/employee/profile', ProfileController::class)->middleware('auth
 Route::middleware(['auth'])->group(function () {
     Route::get('/employee/payroll/index', [PayrollController::class, 'showForm'])->name('employee.payroll.showForm');
     Route::post('/employee/payroll/index', [PayrollController::class, 'getPayroll'])->name('employee.payroll.get');
+    Route::get('/employee/payroll/data', [PayrollController::class, 'getPayrollData'])->name('employee.payroll.data');
+    Route::get('/employee/payroll/generate-pdf/{id}', [PayrollController::class, 'generatePDF'])->name('employee.payroll.generate-pdf');
 });
