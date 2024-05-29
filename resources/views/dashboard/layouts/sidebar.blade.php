@@ -25,6 +25,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="/dashboard/history-absen">
+                        <svg class="bi">
+                            <use xlink:href="#pencil-square" />
+                        </svg>
+                        Absensi
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="/dashboard/salaries">
                         <svg class="bi">
                             <use xlink:href="#cash-coin" />
@@ -46,6 +54,14 @@
                             <use xlink:href="#cash-coin" />
                         </svg>
                         Penggajian
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="/dashboard/history-salary">
+                        <svg class="bi">
+                            <use xlink:href="#cash-coin" />
+                        </svg>
+                        History Penggajian
                     </a>
                 </li>
                 <li class="nav-item">

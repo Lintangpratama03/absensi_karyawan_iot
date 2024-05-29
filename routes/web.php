@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardPostController;
+use App\Http\Controllers\HistoryPayrollController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\SendSalaryController;
 
@@ -82,4 +83,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee/payroll/index', [PayrollController::class, 'getPayroll'])->name('employee.payroll.get');
     Route::get('/employee/payroll/data', [PayrollController::class, 'getPayrollData'])->name('employee.payroll.data');
     Route::get('/employee/payroll/generate-pdf/{id}', [PayrollController::class, 'generatePDF'])->name('employee.payroll.generate-pdf');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard/history-salary', [HistoryPayrollController::class, 'showForm'])->name('dashboard.payroll.showForm');
+    // Route::post('/dashboard/payroll', [HistoryPayrollController::class, 'getPayroll'])->name('dashboard.payroll.get');
+    Route::get('/dashboard/payroll/data', [HistoryPayrollController::class, 'getPayrollData'])->name('dashboard.payroll.data');
+    Route::get('/dashboard/payroll/generate-pdf/{id}', [HistoryPayrollController::class, 'generatePDF'])->name('dashboard.payroll.generate-pdf');
 });
