@@ -9,9 +9,9 @@ class SettingController extends Controller
 {
     public function index()
     {
-        return view('dashboard.setting.index',[
+        return view('dashboard.setting.index', [
             'settings' => Setting::all()
-          ]);
+        ]);
     }
 
     public function create()
@@ -25,15 +25,12 @@ class SettingController extends Controller
         $validatedData = $request->validate([
             'in_start' => 'required',
             'in_end' => 'required',
+            'end_end' => 'required',
             'out_start' => 'required',
-            'fine' => 'required',
-            'fuel' => 'required',
-        
         ]);
 
         Setting::create($validatedData);
         return redirect('/dashboard/setting')->with('success', 'New time has been added!');
-
     }
 
 
@@ -44,7 +41,7 @@ class SettingController extends Controller
 
     public function edit(Setting $setting)
     {
-        return view('dashboard.setting.edit',[
+        return view('dashboard.setting.edit', [
             'setting' => $setting,
         ]);
     }
@@ -55,14 +52,13 @@ class SettingController extends Controller
         $rules = [
             'in_start' => 'required',
             'in_end' => 'required',
+            'end_end' => 'required',
             'out_start' => 'required',
-            'fine' => 'required',
-            'fuel' => 'required',
         ];
 
         $validatedData = $request->validate($rules);
-        Setting::where('id',$setting->id)
-        ->update($validatedData);
+        Setting::where('id', $setting->id)
+            ->update($validatedData);
         return redirect('/dashboard/setting')->with('success', 'Data has been updated!');
     }
 

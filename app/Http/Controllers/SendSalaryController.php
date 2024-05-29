@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Payroll;
 use App\Models\Attendance;
+use App\Models\Salary;
 use App\Models\Setting;
 use Carbon\CarbonPeriod;
 use Dompdf\Dompdf;
@@ -67,10 +68,26 @@ class SendSalaryController extends Controller
             } else {
                 $holidaySalary = 0;
             }
+
+            // cek nominal telat
+            $nominal_cut = Salary::where('name', 'telat')->first();
+            if ($nominal_cut == null) {
+                $nominal_cut = 0;
+            } else {
+                $nominal_cut = Salary::where('name', 'telat')->first()->nominal;
+            }
+            // cek nominal transport
+            $nominal_transport = Salary::where('name', 'transport')->first();
+            if ($nominal_transport == null) {
+                $nominal_transport = 0;
+            } else {
+                $nominal_transport = Salary::where('name', 'transport')->first()->nominal;
+            }
+            // dd($nominal_cut);
             $bonus = ($holidayCount <= 2) ? 100000 : 0;
             $totalSalary = $attendanceDates * $salary;
-            $cut = $lateCount * Setting::first()->fine;
-            $totalTransport = $attendanceDates * Setting::first()->fuel;
+            $cut = $lateCount * $nominal_cut;
+            $totalTransport = $attendanceDates * $nominal_transport;
             $amount = $totalSalary + $holidaySalary + $bonus + $totalTransport - $cut;
 
             Payroll::create([

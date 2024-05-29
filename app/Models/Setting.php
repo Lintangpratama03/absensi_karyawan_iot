@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     use HasFactory;
-    protected $fillable =['in_start','in_end','out_start','fine','fuel'];
+    protected $fillable = ['in_start', 'in_end', 'end_end', 'out_start',];
 }
