@@ -31,7 +31,7 @@
                 <tr>
                     <td>{{ $payroll->month }}</td>
                     <td>{{ $payroll->name }}</td>
-                    <td>{{ $payroll->amount }}</td>
+                    <td>Rp.{{ number_format($payroll->amount, 0, ',', '.') }}</td>
                     <td>
                         <button class="btn btn-primary btn-sm" data-toggle="modal"
                             data-target="#detailModal-{{ $payroll->id }}">Detail</button>
@@ -85,33 +85,36 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Gaji Pokok</label>
-                                            <input type="text" class="form-control" value="{{ $payroll->salary }}"
-                                                readonly>
+                                            <input type="text" class="form-control"
+                                                value="Rp.{{ number_format($payroll->salary, 0, ',', '.') }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Gaji Hari Libur</label>
                                             <input type="text" class="form-control"
-                                                value="{{ $payroll->holiday_salary }}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Bonus</label>
-                                            <input type="text" class="form-control" value="{{ $payroll->bonus }}"
+                                                value="Rp.{{ number_format($payroll->holiday_salary, 0, ',', '.') }}"
                                                 readonly>
                                         </div>
                                         <div class="form-group">
+                                            <label>Bonus</label>
+                                            <input type="text" class="form-control"
+                                                value="Rp.{{ number_format($payroll->bonus, 0, ',', '.') }}" readonly>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Total Gaji</label>
-                                            <input type="text" class="form-control" value="{{ $payroll->total_salary }}"
+                                            <input type="text" class="form-control"
+                                                value="Rp.{{ number_format($payroll->total_salary, 0, ',', '.') }}"
                                                 readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Potongan</label>
-                                            <input type="text" class="form-control" value="{{ $payroll->cut }}"
-                                                readonly>
+                                            <input type="text" class="form-control"
+                                                value="Rp.{{ number_format($payroll->cut, 0, ',', '.') }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Total Transportasi</label>
                                             <input type="text" class="form-control"
-                                                value="{{ $payroll->total_transport }}" readonly>
+                                                value="Rp.{{ number_format($payroll->total_transport, 0, ',', '.') }}"
+                                                readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -119,8 +122,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Jumlah Diterima</label>
-                                            <input type="text" class="form-control" value="{{ $payroll->amount }}"
-                                                readonly>
+                                            <input type="text" class="form-control"
+                                                value="Rp.{{ number_format($payroll->amount, 0, ',', '.') }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Catatan</label>
