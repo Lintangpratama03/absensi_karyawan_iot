@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardPostController;
+use App\Http\Controllers\HistoryAbsenController;
 use App\Http\Controllers\HistoryPayrollController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\SendSalaryController;
@@ -76,6 +77,8 @@ Route::resource('/dashboard/posts', DashboardPostController::class)->middleware(
 Route::resource('/dashboard/setting', SettingController::class)->middleware('auth');
 
 Route::get('/employee/posts', [EmployeeController::class, 'index'])->name('employee.posts.index')->middleware('auth');
+Route::get('/dashboard/history-absen', [HistoryAbsenController::class, 'index'])->name('dashboard.posts.index')->middleware('auth');
+
 Route::resource('/employee/profile', ProfileController::class)->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {

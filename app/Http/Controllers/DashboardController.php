@@ -129,9 +129,9 @@ class DashboardController extends Controller
 
     public function generatePDF()
     {
-        $payrolls = Payroll::all();
+        $payroll = Payroll::all();
         $dompdf = new Dompdf();
-        $html = view('pdf.dashboard', compact('payrolls'))->render();
+        $html = view('pdf.dashboard', compact('payroll'))->render();
 
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A5', 'portrait');
