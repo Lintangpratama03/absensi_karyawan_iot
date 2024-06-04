@@ -74,7 +74,8 @@
                     },
                     {
                         data: 'nominal',
-                        name: 'nominal'
+                        name: 'nominal',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'action',

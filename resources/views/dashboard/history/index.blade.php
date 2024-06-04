@@ -135,27 +135,33 @@
                     },
                     {
                         data: 'total_salary',
-                        name: 'total_salary'
+                        name: 'total_salary',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'cut',
-                        name: 'cut'
+                        name: 'cut',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'bonus',
-                        name: 'bonus'
+                        name: 'bonus',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'total_transport',
-                        name: 'total_transport'
+                        name: 'total_transport',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'holiday_salary',
-                        name: 'holiday_salary'
+                        name: 'holiday_salary',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'amount',
-                        name: 'amount'
+                        name: 'amount',
+                        render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
                     },
                     {
                         data: 'id',

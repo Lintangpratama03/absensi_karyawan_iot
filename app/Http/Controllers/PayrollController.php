@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Payroll;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PayrollController extends Controller
 {
@@ -46,13 +47,17 @@ class PayrollController extends Controller
         $payroll = Payroll::where('id', $id)->first();
 
         if ($payroll) {
-            $dompdf = new Dompdf();
-            $logoPath = public_path('img/logo.jpeg');
-            $html = view('pdf.dashboard', compact('payroll', 'logoPath'))->render();
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4', 'portrait');
-            $dompdf->render();
-            return $dompdf->stream("payroll-{$payroll->id}.pdf");
+            // Convert the $payroll object to an array
+            $data = [
+                'payroll' => $payroll,
+                'logoPath' => public_path('img/logo.jpeg')
+            ];
+
+            // Load the view with the data array
+            $pdf = Pdf::loadView('pdf.dashboard', $data);
+
+            // Return the generated PDF stream
+            return $pdf->stream("payroll-{$payroll->id}.pdf");
         } else {
             return redirect()->back()->with('error', 'Payroll not found');
         }
