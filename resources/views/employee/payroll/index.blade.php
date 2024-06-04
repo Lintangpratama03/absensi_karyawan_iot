@@ -52,6 +52,7 @@
                 <th>Masa Kerja</th>
                 <th>Nama Karyawan</th>
                 <th>Total Masuk</th>
+                <th>Total Libur</th>
                 <th>Gaji Pokok</th>
                 <th>Potongan</th>
                 <th>Bonus</th>
@@ -105,6 +106,10 @@
                     {
                         data: 'count',
                         name: 'count'
+                    },
+                    {
+                        data: 'holiday',
+                        name: 'holiday'
                     },
                     {
                         data: 'total_salary',

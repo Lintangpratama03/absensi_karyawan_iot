@@ -66,8 +66,8 @@
                     <table id="myTable" class="table">
                         <thead>
                             <tr>
-                                <th>Nama</th>
                                 <th>Tanggal</th>
+                                <th>Nama</th>
                                 <th>Waktu Masuk</th>
                                 <th>Status Masuk</th>
                                 <th>Waktu Keluar</th>
@@ -79,8 +79,8 @@
                         <tbody>
                             @foreach ($dailyRecords as $record)
                                 <tr>
-                                    <td>{{ $record['name'] }}</td>
                                     <td>{{ $record['date'] }}</td>
+                                    <td>{{ $record['name'] }}</td>
                                     <td>{{ $record['time_in'] }}</td>
                                     <td>{{ $record['status_in'] }}</td>
                                     <td>{{ $record['time_out'] }}</td>

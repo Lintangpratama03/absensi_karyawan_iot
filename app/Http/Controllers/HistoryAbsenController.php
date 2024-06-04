@@ -8,6 +8,7 @@ use App\Models\Salary;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Setting;
+use App\Models\User;
 
 class HistoryAbsenController extends Controller
 {
@@ -31,44 +32,52 @@ class HistoryAbsenController extends Controller
         $attendances = $attendancesQuery->join('users', 'attendances.tag', '=', 'users.tag')
             ->get();
 
-        // dd($attendances);
-        $dailyRecords = $attendances->groupBy('date')->map(function ($dateGroup) {
-            $in = $dateGroup->where('information', 'In')->first();
-            $out = $dateGroup->where('information', 'Out')->first();
-            // dd($in);
-            $status = 'Bekerja';
-            $penalty = 0;
+        $users = User::all();
+        $dailyRecords = [];
 
-            $late = $dateGroup->where('status', 'Telat')->first();
-            $nominal_cut = Salary::where('name', 'telat')->first();
-            if ($nominal_cut == null) {
-                $nominal_cut = 0;
-            } else {
-                $nominal_cut = Salary::where('name', 'telat')->first()->nominal;
-            }
-            // cek nominal transport
-            $nominal_transport = Salary::where('name', 'transport')->first();
-            if ($nominal_transport == null) {
-                $nominal_transport = 0;
-            } else {
-                $nominal_transport = Salary::where('name', 'transport')->first()->nominal;
-            }
+        foreach ($users as $user) {
+            $userAttendances = $attendances->where('tag', $user->tag);
+            $dates = $userAttendances->pluck('date')->unique();
 
-            if ($late) {
-                $penalty = $nominal_cut;
-            }
+            foreach ($dates as $date) {
+                $dateGroup = $userAttendances->where('date', $date);
+                $in = $dateGroup->where('information', 'In')->first();
+                $out = $dateGroup->where('information', 'Out')->first();
 
-            return [
-                'date' => $dateGroup->first()->date,
-                'name' => $dateGroup->first()->name,
-                'time_in' => $in ? $in->time : '-',
-                'status_in' => $in ? $in->status : '-',
-                'time_out' => $out ? $out->time : '-',
-                'status_out' => $out ? $out->status : '-',
-                'penalty' => $penalty,
-                'work_status' => $status
-            ];
-        });
+                $status = 'Bekerja';
+                $penalty = 0;
+
+                $late = $dateGroup->where('status', 'Telat')->first();
+                $nominal_cut = Salary::where('name', 'telat')->first();
+                if ($nominal_cut == null) {
+                    $nominal_cut = 0;
+                } else {
+                    $nominal_cut = $nominal_cut->nominal;
+                }
+
+                $nominal_transport = Salary::where('name', 'transport')->first();
+                if ($nominal_transport == null) {
+                    $nominal_transport = 0;
+                } else {
+                    $nominal_transport = $nominal_transport->nominal;
+                }
+
+                if ($late) {
+                    $penalty = $nominal_cut;
+                }
+
+                $dailyRecords[] = [
+                    'date' => $date,
+                    'name' => $user->name,
+                    'time_in' => $in ? $in->time : '-',
+                    'status_in' => $in ? $in->status : '-',
+                    'time_out' => $out ? $out->time : '-',
+                    'status_out' => $out ? $out->status : '-',
+                    'penalty' => $penalty,
+                    'work_status' => $status
+                ];
+            }
+        }
         // dd($dailyRecords);
         return view('dashboard.history-absen.index', compact('dailyRecords'));
     }

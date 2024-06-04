@@ -29,7 +29,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 mb-3">
+        {{-- <div class="col-md-4 mb-3">
             <div class="form-group">
                 <label for="month">Bulan:</label>
                 <select id="month" name="month" class="form-control">
@@ -48,7 +48,7 @@
                     <option value="12">Desember</option>
                 </select>
             </div>
-        </div>
+        </div> --}}
         <div class="col-md-4 mb-3">
             <div class="form-group">
                 <label for="year">Tahun:</label>
@@ -74,6 +74,7 @@
                 <th>Masa Kerja</th>
                 <th>Nama Karyawan</th>
                 <th>Total Masuk</th>
+                <th>Total Libur</th>
                 <th>Gaji Pokok</th>
                 <th>Potongan</th>
                 <th>Bonus</th>
@@ -127,6 +128,10 @@
                     {
                         data: 'count',
                         name: 'count'
+                    },
+                    {
+                        data: 'holiday',
+                        name: 'holiday'
                     },
                     {
                         data: 'total_salary',
