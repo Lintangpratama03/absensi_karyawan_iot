@@ -155,7 +155,9 @@
                 }
 
                 table = $('.yajra-datatable').DataTable({
-                    // Atur opsi DataTables sesuai kebutuhan
+                    order: [
+                        [0, 'desc']
+                    ]
                 });
             }
 

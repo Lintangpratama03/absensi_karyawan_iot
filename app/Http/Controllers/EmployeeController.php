@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use App\Models\Salary;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Setting;
@@ -37,13 +38,18 @@ class EmployeeController extends Controller
             $penalty = 0;
 
             $late = $dateGroup->where('status', 'Telat')->first();
-            $settings = Setting::first();
-            $fine = $settings ? $settings->fine : 0;
-
-            if ($late) {
-                $penalty = $fine;
+            $nominal_cut = Salary::where('name', 'telat')->first();
+            if ($nominal_cut == null) {
+                $nominal_cut = 0;
+            } else {
+                $nominal_cut = Salary::where('name', 'telat')->first()->nominal;
             }
 
+            if ($late) {
+                $penalty = $nominal_cut;
+            }
+
+            // cek nominal transport
             return [
                 'date' => $dateGroup->first()->date,
                 'time_in' => $in ? $in->time : '-',

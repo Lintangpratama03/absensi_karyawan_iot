@@ -66,6 +66,7 @@
                     <table id="myTable" class="table">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Nama</th>
                                 <th>Waktu Masuk</th>
@@ -79,6 +80,7 @@
                         <tbody>
                             @foreach ($dailyRecords as $record)
                                 <tr>
+                                    <td></td>
                                     <td>{{ $record['date'] }}</td>
                                     <td>{{ $record['name'] }}</td>
                                     <td>{{ $record['time_in'] }}</td>
@@ -91,6 +93,7 @@
                             @endforeach
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
@@ -111,8 +114,19 @@
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }]
-
+                }],
+                "order": [
+                    [1, 'desc']
+                ],
+                "fnDrawCallback": function() {
+                    var api = this.api();
+                    api.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }
             });
         });
     </script>

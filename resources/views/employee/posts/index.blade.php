@@ -88,7 +88,7 @@
                 "targets": 0
             }],
             "order": [
-                [1, 'asc']
+                [1, 'desc']
             ],
             "drawCallback": function(settings) {
                 var api = this.api();

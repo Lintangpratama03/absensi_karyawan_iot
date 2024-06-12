@@ -44,9 +44,8 @@ class HistoryAbsenController extends Controller
                 $in = $dateGroup->where('information', 'In')->first();
                 $out = $dateGroup->where('information', 'Out')->first();
 
-                $status = 'Bekerja';
                 $penalty = 0;
-
+                
                 $late = $dateGroup->where('status', 'Telat')->first();
                 $nominal_cut = Salary::where('name', 'telat')->first();
                 if ($nominal_cut == null) {
@@ -54,16 +53,26 @@ class HistoryAbsenController extends Controller
                 } else {
                     $nominal_cut = $nominal_cut->nominal;
                 }
-
+                
                 $nominal_transport = Salary::where('name', 'transport')->first();
                 if ($nominal_transport == null) {
                     $nominal_transport = 0;
                 } else {
                     $nominal_transport = $nominal_transport->nominal;
                 }
-
+                
                 if ($late) {
                     $penalty = $nominal_cut;
+                }
+                
+                $status = 'Bekerja';
+                // status kerja
+                if (!$in && !$out) {
+                    $status = 'Absen';
+                } elseif ($in && !$out) {
+                    $status = 'Absen';
+                } elseif (!$in && $out) {
+                    $status = 'Absen';
                 }
 
                 $dailyRecords[] = [

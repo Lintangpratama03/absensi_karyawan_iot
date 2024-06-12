@@ -47,15 +47,46 @@ class SendSalaryController extends Controller
 
         foreach ($posts as $post) {
             // Hitung total hari kehadiran
-            $attendanceDates = Attendance::where('tag', $post->tag)
+            $attendanceDates = DB::table('attendances')
+                ->where('tag', $post->tag)
                 ->whereMonth('date', Carbon::createFromFormat('Y-m', $month)->month)
-                ->where('status', 'Masuk')
-                ->count();
-
-            $lateCount = Attendance::where('tag', $post->tag)
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('attendances as in_attendance')
+                        ->whereRaw('in_attendance.date = attendances.date')
+                        ->where('in_attendance.status', 'Masuk');
+                })
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('attendances as out_attendance')
+                        ->whereRaw('out_attendance.date = attendances.date')
+                        ->where('out_attendance.information', 'Out');
+                })
+                ->distinct('date')
+                ->count('date');
+            $lateCount = DB::table('attendances')
+                ->where('tag', $post->tag)
                 ->whereMonth('date', Carbon::createFromFormat('Y-m', $month)->month)
-                ->where('status', 'Telat')
-                ->count();
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('attendances as in_attendance')
+                        ->whereRaw('in_attendance.date = attendances.date')
+                        ->where('in_attendance.status', 'Telat');
+                })
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('attendances as out_attendance')
+                        ->whereRaw('out_attendance.date = attendances.date')
+                        ->where('out_attendance.information', 'Out');
+                })
+                ->distinct('date')
+                ->count('date');
+            // dd($attendanceDates);
+            // $lateCount = Attendance::where('tag', $post->tag)
+            //     ->whereMonth('date', Carbon::createFromFormat('Y-m', $month)->month)
+            //     ->where('status', 'Telat')
+            //     ->where('information', 'Out')
+            //     ->count();
             // Hitung total hari dalam bulan ini
             $totalDaysInMonth = Carbon::createFromFormat('Y-m', $month)->endOfMonth()->day;
 
