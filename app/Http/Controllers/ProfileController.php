@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 class ProfileController extends Controller
 {
 
@@ -30,16 +31,16 @@ class ProfileController extends Controller
     public function show(Post $post)
     {
         $user = Auth::user();
-        $post = Post::where('tag', $user->tag)->first(); 
+        $post = Post::where('tag', $user->tag)->first();
         return view('employee.profile.show', compact('post'));
     }
 
-   
+
     public function edit(Post $post)
     {
         $user = Auth::user();
         $post = Post::where('tag', $user->tag)->first();
-        return view('employee.profile.edit', compact('post','user'));
+        return view('employee.profile.edit', compact('post', 'user'));
     }
 
 
@@ -55,24 +56,24 @@ class ProfileController extends Controller
             'image' => 'image|file|max:1024'
         ];
 
-        $validate =[ 
+        $validate = [
             'username' => 'required',
             'password' => 'required'
         ];
 
         $validatedData = $request->validate($rules);
         $validated = $request->validate($validate);
-        
-     if($request->file('image')){
-        $validatedData['image'] = $request->file('image')->store('post-images');
+
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('post-images');
         }
-       
-       Post::where('tag',$post->tag)->update($validatedData);
-       User::where('tag',$user->tag)->update([
-        'username' => $validated['username'],
-        'password' => Hash::make($validated['password']),
-    ]);
-        
+
+        Post::where('tag', $post->tag)->update($validatedData);
+        User::where('tag', $user->tag)->update([
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
 
         return redirect('/employee/profile/show')->with('success', 'Data has been updated!');
         return redirect('/employee/profile/show')->with('error', 'Failed to update data!');

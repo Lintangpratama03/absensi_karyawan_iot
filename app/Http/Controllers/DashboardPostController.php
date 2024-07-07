@@ -71,7 +71,8 @@ class DashboardPostController extends Controller
 
     public function edit(Post $post)
     {
-        return view('dashboard.posts.edit', [
+        $gaji = Salary::all();
+        return view('dashboard.posts.edit', compact('gaji'), [
             'post' => $post,
         ]);
     }
@@ -96,7 +97,9 @@ class DashboardPostController extends Controller
 
     public function destroy(Post $post)
     {
+        // dd($post->id);
         Post::destroy($post->id);
+        User::destroy($post->id);
         return redirect('/dashboard/posts')->with('success', 'Data has been deleted!');
     }
 }

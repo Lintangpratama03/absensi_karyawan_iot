@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardAdminController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -36,12 +37,13 @@ Route::get('/', function () {
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard');
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'logout']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware('auth');
+// Route::get('/dashboard', function () {
+//     return view('dashboard.index');
+// })->middleware('auth');
 
 Route::get('/employee', function () {
     return view('employee.index');

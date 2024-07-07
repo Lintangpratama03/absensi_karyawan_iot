@@ -11,26 +11,14 @@
 <link href="/css/dashboard.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-<!-- Custom styles for this template -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
-<!-- Custom styles for this template -->
-<link href="/css/dashboard.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-
 @section('container')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Employee</h1>
+        <h1 class="h2">Absensi Karyawan</h1>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <form action="{{ route('employee.posts.index') }}" method="GET">
+        <div class="col-md-4">
+            <form action="{{ route('dashboard.posts.index') }}" method="GET">
                 <div class="form-group">
                     <label for="filterDate">Filter dengan Tanggal:</label>
                     <input type="date" id="filterDate" name="filterDate" class="form-control">
@@ -38,14 +26,25 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6">
-            <form action="{{ route('employee.posts.index') }}" method="GET">
+        <div class="col-md-4">
+            <form action="{{ route('dashboard.posts.index') }}" method="GET">
                 <div class="form-group">
                     <label for="filterMonth">Filter dengan Bulan:</label>
                     <input type="month" id="filterMonth" name="filterMonth" class="form-control">
                     <button type="submit" class="btn btn-primary mt-2">Filter</button>
                 </div>
             </form>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filterName">Filter dengan Nama:</label>
+                <select id="filterName" class="form-control">
+                    <option value="">Pilih Nama</option>
+                    @foreach ($names as $name)
+                        <option value="{{ $name }}">{{ $name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
 
@@ -99,6 +98,7 @@
         </div>
     </div>
 @endsection
+
 @section('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
@@ -126,6 +126,16 @@
                     }).nodes().each(function(cell, i) {
                         cell.innerHTML = i + 1;
                     });
+                }
+            });
+
+            // Filter by name
+            $('#filterName').on('change', function() {
+                var selectedName = $(this).val();
+                if (selectedName) {
+                    t.column(2).search('^' + selectedName + '$', true, false).draw();
+                } else {
+                    t.column(2).search('').draw();
                 }
             });
         });
