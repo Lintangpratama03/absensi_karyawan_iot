@@ -48,6 +48,16 @@
                     </div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="izin" class="form-label">Jam Izin :</label>
+                <input type="time" class="form-control @error('izin') is-invalid @enderror" id="izin" name="izin"
+                    required value="{{ old('izin') }}">
+                @error('izin')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
 
             <button type="submit" class="btn btn-primary">Kirim</button>
         </form>

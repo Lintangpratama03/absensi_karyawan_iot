@@ -27,6 +27,7 @@ class SettingController extends Controller
             'in_end' => 'required',
             'end_end' => 'required',
             'out_start' => 'required',
+            'izin' => 'required',
         ]);
 
         Setting::create($validatedData);
@@ -54,6 +55,7 @@ class SettingController extends Controller
             'in_end' => 'required',
             'end_end' => 'required',
             'out_start' => 'required',
+            'izin' => 'required',
         ];
 
         $validatedData = $request->validate($rules);

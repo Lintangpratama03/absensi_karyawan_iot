@@ -21,6 +21,7 @@
                     <th scope="col">Akhir Absen Masuk</th>
                     <th scope="col">Akhir Absen Telat</th>
                     <th scope="col">Absen Keluar</th>
+                    <th scope="col">Jam Izin</th>
                     <th scope="col">Aksi</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                         <td>{{ $setting->in_end }}</td>
                         <td>{{ $setting->end_end }}</td>
                         <td>{{ $setting->out_start }}</td>
+                        <td>{{ $setting->izin }}</td>
                         <td>
                             <a href="/dashboard/setting/{{ $setting->id }}/edit" class="badge bg-warning"> <svg
                                     class="bi">
