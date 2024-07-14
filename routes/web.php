@@ -50,6 +50,7 @@ Route::get('/employee', function () {
 })->middleware('auth');
 
 Route::get('/dashboard/payroll', [DashboardController::class, 'index'])->middleware('auth');
+Route::get('/employee/dashboard', [DashboardController::class, 'dashboard'])->name('halaman')->middleware('auth');
 Route::get('/dashboard/payroll/get-salary/{id}', [DashboardController::class, 'getSalary']);
 
 Route::get('/dashboard/payroll/get-attendance-count/{tag}/{month}', [DashboardController::class, 'getAttendanceCount']);

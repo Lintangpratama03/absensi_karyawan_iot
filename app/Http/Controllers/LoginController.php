@@ -9,8 +9,8 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('login.index',[
-            'title'=> 'Login'
+        return view('login.index', [
+            'title' => 'Login'
         ]);
     }
 
@@ -21,7 +21,7 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $userRole = Auth::user()->role;
 
@@ -30,7 +30,7 @@ class LoginController extends Controller
                     return redirect()->intended('/dashboard');
                     break;
                 case 'karyawan':
-                    return redirect()->intended('/employee/profile/show');
+                    return redirect()->intended('/employee/dashboard');
                     break;
                 default:
                     return redirect()->intended('/');
@@ -38,7 +38,7 @@ class LoginController extends Controller
             }
         }
 
-        return back()->with('loginError','Login failed!'); 
+        return back()->with('loginError', 'Login failed!');
     }
 
     public function logout()

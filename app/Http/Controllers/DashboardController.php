@@ -9,7 +9,9 @@ use App\Models\Post;
 use App\Models\Payroll;
 use App\Models\Attendance;
 use App\Models\Setting;
+use App\Models\User;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -19,6 +21,68 @@ class DashboardController extends Controller
         return view('dashboard.payroll.index', [
             'posts' => $posts
         ]);
+    }
+
+    public function dashboard(Request $request)
+    {
+        $date = $request->input('date') ? Carbon::parse($request->input('date')) : Carbon::today();
+        $userTag = Auth::user()->tag;
+        // dd($userTag);
+        $checkInStatus = Attendance::where('date', $date)
+            ->where('information', 'In')
+            ->where('tag', $userTag)
+            ->pluck('status')
+            ->first();
+
+        // dd($checkInStatus);
+        $checkOutsToday = Attendance::where('date', $date)
+            ->where('information', 'Out')
+            ->where('tag', $userTag)
+            ->pluck('status')
+            ->first();
+
+        // $totalEmployees = User::where('role', 'karyawan')->count();
+
+        $workingToday = Attendance::where('date', $date)
+            ->where('tag', $userTag)
+            ->select('tag')
+            ->groupBy('tag')
+            ->havingRaw('COUNT(DISTINCT information) = 2')
+            ->count();
+
+        $date = $request->input('date') ? Carbon::parse($request->input('date')) : Carbon::today();
+        $currentMonth = $date->month;
+        $currentYear = $date->year;
+
+        $workingMonth = Attendance::whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->where('tag', $userTag)
+            ->select('date')
+            ->groupBy('date')
+            ->havingRaw('COUNT(DISTINCT information) = 2')
+            ->count();
+        // dd($workingMonth);
+        $selectedMonth = $request->input('month', Carbon::now()->format('Y-m'));
+        $startDate = Carbon::createFromFormat('Y-m', $selectedMonth)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $selectedMonth)->endOfMonth();
+
+        $dailyAttendance = Attendance::select(
+            'date',
+            DB::raw('COUNT(DISTINCT CASE WHEN information = "In" THEN tag END) as check_ins'),
+            DB::raw('COUNT(DISTINCT CASE WHEN information = "Out" THEN tag END) as check_outs')
+        )
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('tag', $userTag)
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $months = Attendance::select(DB::raw('DATE_FORMAT(date, "%Y-%m") as month'))
+            ->distinct()
+            ->orderBy('month', 'desc')
+            ->pluck('month');
+
+        return view('employee.dashboard', compact('currentMonth', 'checkInStatus', 'checkOutsToday',  'workingToday', 'date', 'dailyAttendance', 'selectedMonth', 'months', 'workingMonth'));
     }
 
     public function getSalary($id)
