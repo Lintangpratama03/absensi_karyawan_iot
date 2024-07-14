@@ -47,21 +47,18 @@
                     </div>
                 @enderror
             </div>
-
-            <div class="mb-3">
+            <div class="mb-3 d-none">
                 <label for="holiday_salary" class="form-label">Gaji Libur</label>
                 <input type="text" class="form-control" id="holiday_salary" name="holiday_salary" readonly>
             </div>
 
             <script>
-                document.getElementById('salary').addEventListener('change', function() {
-                    var salaryValue = parseFloat(this.value);
+                document.getElementById('salary').addEventListener('input', function() {
+                    var salaryValue = parseFloat(this.value.replace(/[^\d.-]/g, '')); // Remove non-numeric characters
                     if (!isNaN(salaryValue)) {
-                        var formattedHolidaySalary = (salaryValue * 2).toLocaleString('id-ID', {
-                            style: 'currency',
-                            currency: 'IDR'
-                        }).replace(',00', ''); // untuk menghapus desimal jika nol
-                        document.getElementById('holiday_salary').value = formattedHolidaySalary;
+                        var holidaySalary = salaryValue * 2; // Hitung gaji libur
+                        document.getElementById('holiday_salary').value = holidaySalary.toFixed(
+                            2); // Menetapkan nilai tanpa format mata uang
                     } else {
                         document.getElementById('holiday_salary').value = '';
                     }

@@ -6,7 +6,7 @@
     </div>
 
     <div class="col-lg-8">
-        <form method="post" action="/dashboard/posts" enctype="multipart/form-data">
+        <form id="postForm" method="post" action="/dashboard/posts" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="tag" class="form-label">Tag</label>
@@ -80,19 +80,17 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 d-none">
                 <label for="holiday_salary" class="form-label">Gaji Libur</label>
                 <input type="text" class="form-control" id="holiday_salary" name="holiday_salary" readonly>
             </div>
 
             <script>
-                document.getElementById('salary').addEventListener('change', function() {
-                    var salaryValue = parseFloat(this.value);
+                document.getElementById('salary').addEventListener('input', function() {
+                    var salaryValue = parseFloat(this.value.replace(/[^\d.-]/g, '')); // Remove non-numeric characters
                     if (!isNaN(salaryValue)) {
-                        var formattedHolidaySalary = (salaryValue * 2).toLocaleString('id-ID', {
-                            style: 'currency',
-                            currency: 'IDR'
-                        }).replace(',00', ''); // to remove decimals if it's zero
+                        var formattedHolidaySalary = (salaryValue * 2).toFixed(
+                            2); // Calculate double salary and keep two decimals
                         document.getElementById('holiday_salary').value = formattedHolidaySalary;
                     } else {
                         document.getElementById('holiday_salary').value = '';
@@ -140,7 +138,38 @@
                     </div>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Kirim</button>
+            <button type="submit" class="btn btn-primary" onclick="validateForm(event)">Kirim</button>
         </form>
     </div>
+    <script>
+        function validateForm(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Validate each required field
+            var form = document.getElementById('postForm');
+            var inputs = form.querySelectorAll('input, select');
+
+            var isValid = true;
+            inputs.forEach(function(input) {
+                if (input.required && !input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            // If all inputs are valid, submit the form
+            if (isValid) {
+                form.submit();
+            } else {
+                // Use SweetAlert or other alert method to show validation error
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Silakan lengkapi semua data yang diperlukan!',
+                });
+            }
+        }
+    </script>
 @endsection
