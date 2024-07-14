@@ -160,17 +160,27 @@
         }
 
         #submit {
-            color: #707075;
+            background-color: rgba(255, 255, 255, 0.1);
+            /* Latar belakang abu-abu transparan */
+            color: #ffffff;
+            /* Warna teks diubah menjadi hitam */
             margin-top: 40px;
-            transition: color 300ms;
+            transition: color 300ms, background-color 300ms;
+            /* Transisi warna teks dan latar belakang */
         }
 
         #submit:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Warna latar belakang saat difokuskan */
             color: #f2f2f2;
+            /* Warna teks saat difokuskan */
         }
 
         #submit:active {
+            background-color: rgba(255, 255, 255, 0.3);
+            /* Warna latar belakang saat ditekan */
             color: #d0d0d2;
+            /* Warna teks saat ditekan */
         }
     </style>
 </head>

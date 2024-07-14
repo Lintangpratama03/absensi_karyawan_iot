@@ -22,21 +22,23 @@
             <div class="mb-3">
                 <label for="salaryy" class="form-label">Gaji Pokok Saat Ini</label>
                 <input type="text" class="form-control @error('salary') is-invalid @enderror" id="salaryy"
-                    name="salaryy" required value="{{ old('salary', $post->salary) }}" disabled>
+                    name="salaryy" required value="Rp. {{ old('salary', number_format($post->salary, 0, ',', '.')) }}"
+                    disabled>
                 @error('salary')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
+
             <div class="mb-3">
                 <label for="salary" class="form-label">Gaji Pokok</label>
                 <select class="form-control @error('salary') is-invalid @enderror" id="salary" name="salary" required>
-                    <option value="0">
-                        Silahkan Pilih Gaji Pokok</option>
+                    <option value="0">Silahkan Pilih Gaji Pokok</option>
                     @foreach ($gaji as $g)
                         <option value="{{ $g->nominal }}" {{ old('salary') == $g->nominal ? 'selected' : '' }}>
-                            {{ $g->nominal }} [{{ $g->name }}] </option>
+                            RP {{ number_format($g->nominal, 0, ',', '.') }} [{{ $g->name }}]
+                        </option>
                     @endforeach
                 </select>
                 @error('salary')
@@ -45,20 +47,27 @@
                     </div>
                 @enderror
             </div>
+
             <div class="mb-3">
                 <label for="holiday_salary" class="form-label">Gaji Libur</label>
                 <input type="text" class="form-control" id="holiday_salary" name="holiday_salary" readonly>
             </div>
+
             <script>
                 document.getElementById('salary').addEventListener('change', function() {
                     var salaryValue = parseFloat(this.value);
                     if (!isNaN(salaryValue)) {
-                        document.getElementById('holiday_salary').value = salaryValue * 2;
+                        var formattedHolidaySalary = (salaryValue * 2).toLocaleString('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR'
+                        }).replace(',00', ''); // untuk menghapus desimal jika nol
+                        document.getElementById('holiday_salary').value = formattedHolidaySalary;
                     } else {
                         document.getElementById('holiday_salary').value = '';
                     }
                 });
             </script>
+
             <button type="submit" class="btn btn-primary">Edit</button>
         </form>
     </div>
