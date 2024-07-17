@@ -229,6 +229,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         var current = null;
         document.querySelector('#username').addEventListener('focus', function(e) {
@@ -279,7 +280,18 @@
                 }
             });
         });
+
+        // Check for login error and display SweetAlert
+        @if (session('loginError'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: '{{ session('loginError') }}',
+                confirmButtonText: 'OK'
+            });
+        @endif
     </script>
+
 </body>
 
 </html>

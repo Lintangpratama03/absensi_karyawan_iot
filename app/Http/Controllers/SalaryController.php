@@ -37,10 +37,35 @@ class SalaryController extends Controller
             'nominal' => 'required|integer'
         ]);
 
-        Salary::create($request->all());
+        $nominal = (int)str_replace(['Rp', '.', ','], '', $request->nominal);
+
+        Salary::create([
+            'name' => $request->name,
+            'nominal' => $nominal
+        ]);
 
         return redirect()->route('salaries.index')->with('success', 'Salary created successfully.');
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'nominal' => 'required|integer'
+        ]);
+
+        $nominal = (int)str_replace(['Rp', '.', ','], '', $request->nominal);
+
+        $salary = Salary::findOrFail($id);
+        $salary->update([
+            'name' => $request->name,
+            'nominal' => $nominal
+        ]);
+
+        return redirect()->route('salaries.index')->with('success', 'Salary updated successfully.');
+    }
+
+
 
     public function show($id)
     {
@@ -52,19 +77,6 @@ class SalaryController extends Controller
     {
         $salary = Salary::findOrFail($id);
         return view('dashboard.salary.edit', compact('salary'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'nominal' => 'required|integer'
-        ]);
-
-        $salary = Salary::findOrFail($id);
-        $salary->update($request->all());
-
-        return redirect()->route('salaries.index')->with('success', 'Salary updated successfully.');
     }
 
     public function destroy($id)
