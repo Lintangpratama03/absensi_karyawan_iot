@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Attendance extends Model
 {
     use HasFactory;
-    protected $fillable = ['tag', 'information', 'status', 'date', 'time'];
+    protected $fillable = ['tag', 'information', 'status', 'date', 'time', 'izin'];
 }
